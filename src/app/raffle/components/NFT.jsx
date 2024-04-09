@@ -5,7 +5,10 @@ const NFT = () => {
   return (
     <div className=" basis-[300px]">
       <Image
-        src="/25.PNG"
+        // loader={() =>
+        //   "https://crazymonsters.s3.amazonaws.com/CrazyMonsterImages/144.png"
+        // }
+        src="/nft.png"
         alt=""
         height={400}
         width={400}
