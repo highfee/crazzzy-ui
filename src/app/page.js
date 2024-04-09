@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <ContainerLayout>
-      <main className="mt-20 flex gap-10">
+      <main className="mt-20 flex flex-col-reverse lg:flex-row gap-10">
         <NFTs />
         <StakingInfo />
       </main>
