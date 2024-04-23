@@ -15,6 +15,7 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet";
+import ConnectBtn from "./ConnectBtn";
 
 const rubik = Rubik_Bubbles({
   subsets: ["latin"],
@@ -60,13 +61,14 @@ const Header = () => {
           </div>
 
           <div className="flex gap-2 items-center">
-            <ConnectWallet
+            {/* <ConnectWallet
               dropdownPosition={{
                 side: "bottom",
                 align: "right",
               }}
               switchToActiveChain
-            />
+            /> */}
+            <ConnectBtn />
             <div className="lg:hidden">
               <Sheet className="top-20 bg-white max-h-fit">
                 <SheetTrigger>

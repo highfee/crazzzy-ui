@@ -1,3 +1,6 @@
+import { createThirdwebClient, getContract, resolveMethod } from "thirdweb";
+import { defineChain } from "thirdweb/chains";
+
 export const filters = ["All", "Staked", "Unstaked"];
 
 export const NFT_images = [
@@ -42,3 +45,26 @@ export const NFT_images = [
     img: "https://crazymonsters.s3.amazonaws.com/CrazyMonsterImages/12.png",
   },
 ];
+
+// create the client with your clientId, or secretKey if in a server environment
+export const client = createThirdwebClient({
+  clientId: "474049d9bbf2b9e96232cb434fb906b1",
+});
+
+export const cronosTestnet = defineChain({
+  id: 338,
+});
+
+// connect to your contract
+export const contract = getContract({
+  client,
+  chain: defineChain(338),
+  address: "0x15a4D6Fd878Ce16Eb8df3b777378BDF1f8Cf94eA",
+});
+
+export function hideMiddlePart(str, startChars, endChars) {
+  const placeholder = ".";
+  const middleChars = str.length - startChars - endChars;
+  const hiddenPart = placeholder.repeat(Math.max(0, middleChars));
+  return str.slice(0, startChars) + hiddenPart + str.slice(-endChars);
+}

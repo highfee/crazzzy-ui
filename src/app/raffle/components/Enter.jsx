@@ -1,3 +1,6 @@
+"use client";
+
+import TransactionBtn from "@/components/TransactionBtn";
 import {
   Select,
   SelectContent,
@@ -6,15 +9,34 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { useEffect, useState } from "react";
+import { prepareContractCall, resolveMethod } from "thirdweb";
+import { contract } from "@/utils/constants";
+import { useReadContract } from "thirdweb/react";
+
 const tokens = [
   { name: "$CRO", value: "cro" },
   { name: "$FRTN", value: "frtn" },
   { name: "$CBT", value: "cbt" },
 ];
 
-const open = true;
-
 const Enter = () => {
+  const [open, setOpen] = useState(true);
+
+  const { data, isLoading } = useReadContract({
+    contract,
+    method: resolveMethod("getRaffleDetails"),
+    params: [1],
+  });
+
+  // useEffect(() => {
+  //   setOpen(data[11]);
+  // }, [data]);
+
+  if (isLoading) return <div>loading...</div>;
+  // console.log(data[9].toString());
+  console.log(new Date(data[9].toString() * 1000));
+
   return (
     <div>
       <h1 className="text-3xl">Crazzzy Monster #12</h1>
@@ -36,7 +58,9 @@ const Enter = () => {
           <span className="hidden md:block">Time left</span>
         </div>
         <div className="flex flex-col items-center gap-1">
-          <p className="text-xl">19/1000</p>
+          <p className="text-xl">
+            {/* {data[5].length}/{data[8].toString()} */}
+          </p>
           <p className="text-gray-500">Tickets Sold</p>
         </div>
       </div>
@@ -54,6 +78,7 @@ const Enter = () => {
             <div className="mt-5 rounded-full overflow-hidden flex">
               <input
                 type="number"
+                min={1}
                 className="w-full p-5 text-sm lg:text-xl border-0 outline-0 text-black"
                 placeholder="Number of Tickets"
               />
@@ -99,9 +124,29 @@ const Enter = () => {
           )}
 
           {open && (
-            <button className="mt-10 w-full p-5 bg-[#15151f border rounded-full transition duration-300">
-              Buy Ticket(s)
-            </button>
+            <TransactionBtn
+              transaction={() => {
+                const trx = prepareContractCall({
+                  contract,
+                  method: resolveMethod("joinRaffle"),
+                  // params: [raffleId, numOfTickets, _token],
+                  params: [1, 2, "0xEB52532a377b91Ee8F357F3041b28c589eADDde2"],
+                });
+                return trx;
+              }}
+              onTransactionConfirmed={(trx) => {}}
+              onError={(err) => {}}
+              style={{
+                backgroundColor: "transparent",
+                color: "#FFF",
+                padding: "20px",
+                border: "1px solid white",
+                width: "100%",
+                marginTop: "30px",
+                borderRadius: "50px",
+              }}
+              text="Buy Ticket(s)"
+            />
           )}
         </div>
       </div>
