@@ -48,7 +48,7 @@ export const NFT_images = [
 
 // create the client with your clientId, or secretKey if in a server environment
 export const client = createThirdwebClient({
-  clientId: "474049d9bbf2b9e96232cb434fb906b1",
+  clientId: "1639134fe6d77249631aa361f3a9cbe1",
 });
 
 export const cronosTestnet = defineChain({
