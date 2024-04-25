@@ -10,9 +10,15 @@ import {
 } from "@/components/ui/select";
 
 import { useEffect, useState } from "react";
-import { prepareContractCall, resolveMethod } from "thirdweb";
-import { contract } from "@/utils/constants";
-import { useReadContract } from "thirdweb/react";
+import { prepareContractCall, resolveMethod, readContract } from "thirdweb";
+import {
+  raffleContract,
+  getRaffleEndTime,
+  crmTokenContract,
+} from "@/utils/constants";
+import { useReadContract, useActiveAccount } from "thirdweb/react";
+
+import { ethers } from "ethers";
 
 const tokens = [
   { name: "$CRO", value: "cro" },
@@ -21,21 +27,44 @@ const tokens = [
 ];
 
 const Enter = () => {
+  const [raffle, setRaffle] = useState([]);
   const [open, setOpen] = useState(true);
+  const [numOfTickets, setNumberOfTickets] = useState(0);
+  const [approved, setApproved] = useState(false);
+  const [allowance, setAllowance] = useState(0);
+
+  const activeAccount = useActiveAccount();
 
   const { data, isLoading } = useReadContract({
-    contract,
+    contract: raffleContract,
     method: resolveMethod("getRaffleDetails"),
     params: [1],
   });
 
-  // useEffect(() => {
-  //   setOpen(data[11]);
-  // }, [data]);
+  const getAllowance = async () => {
+    const data = await readContract({
+      contract: crmTokenContract,
+      method: resolveMethod("allowance"),
+      params: [activeAccount?.address, raffleContract.address],
+    });
+    setAllowance(data);
+    // if (data == 0) {
+    //   setApproved(false);
+    // }
+  };
+
+  useEffect(() => {
+    activeAccount && getAllowance();
+    if (!isLoading && data) {
+      setRaffle(data);
+    }
+  }, [allowance, isLoading, approved, activeAccount, numOfTickets]);
 
   if (isLoading) return <div>loading...</div>;
-  // console.log(data[9].toString());
-  console.log(new Date(data[9].toString() * 1000));
+
+  const timeRemaining = getRaffleEndTime(data[9].toString());
+
+  const ticketPrice = parseFloat(raffle[7]);
 
   return (
     <div>
@@ -44,10 +73,10 @@ const Enter = () => {
         <div className="flex items-center gap-6 ">
           {open ? (
             <div className="bg-[#15151f]  p-3 lg:p-5 rounded-full flex gap-3  ">
-              <span>20days,</span>
-              <span>10hrs,</span>
-              <span>8mns,</span>
-              <span>55secs</span>
+              <span>{timeRemaining.days}days,</span>
+              <span>{timeRemaining.hours}hrs,</span>
+              <span>{timeRemaining.minutes}mins,</span>
+              <span>{timeRemaining.seconds}secs</span>
             </div>
           ) : (
             <div className="bg-[#15151f] p-3 lg:p-5 rounded-full flex gap-3  px-8 ">
@@ -59,7 +88,7 @@ const Enter = () => {
         </div>
         <div className="flex flex-col items-center gap-1">
           <p className="text-xl">
-            {/* {data[5].length}/{data[8].toString()} */}
+            {data[5].length}/{data[8].toString()}
           </p>
           <p className="text-gray-500">Tickets Sold</p>
         </div>
@@ -81,6 +110,9 @@ const Enter = () => {
                 min={1}
                 className="w-full p-5 text-sm lg:text-xl border-0 outline-0 text-black"
                 placeholder="Number of Tickets"
+                onInput={(e) => {
+                  setNumberOfTickets(e.target.value);
+                }}
               />
               <div className="w-40 grid place-items-center bg-[#15151f] text-lg">
                 <Select>
@@ -123,31 +155,64 @@ const Enter = () => {
             </div>
           )}
 
-          {open && (
-            <TransactionBtn
-              transaction={() => {
-                const trx = prepareContractCall({
-                  contract,
-                  method: resolveMethod("joinRaffle"),
-                  // params: [raffleId, numOfTickets, _token],
-                  params: [1, 2, "0xEB52532a377b91Ee8F357F3041b28c589eADDde2"],
-                });
-                return trx;
-              }}
-              onTransactionConfirmed={(trx) => {}}
-              onError={(err) => {}}
-              style={{
-                backgroundColor: "transparent",
-                color: "#FFF",
-                padding: "20px",
-                border: "1px solid white",
-                width: "100%",
-                marginTop: "30px",
-                borderRadius: "50px",
-              }}
-              text="Buy Ticket(s)"
-            />
-          )}
+          <button
+            className="w-full disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={numOfTickets === 0}
+          >
+            {open &&
+              (approved && allowance >= ticketPrice * numOfTickets ? (
+                <TransactionBtn
+                  transaction={() => {
+                    const trx = prepareContractCall({
+                      contract: raffleContract,
+                      method: resolveMethod("joinRaffle"),
+                      // params: [raffleId, numOfTickets, _token],
+                      params: [1, numOfTickets, crmTokenContract.address],
+                    });
+                    return trx;
+                  }}
+                  onTransactionConfirmed={(trx) => {}}
+                  style={{
+                    backgroundColor: "transparent",
+                    color: "#FFF",
+                    padding: "20px",
+                    border: "1px solid white",
+                    width: "100%",
+                    marginTop: "30px",
+                    borderRadius: "50px",
+                  }}
+                  text="Buy Ticket(s)"
+                />
+              ) : (
+                <TransactionBtn
+                  transaction={() => {
+                    const trx = prepareContractCall({
+                      contract: crmTokenContract,
+                      method: resolveMethod("approve"),
+                      // params: [raffleId, numOfTickets, _token],
+                      params: [
+                        raffleContract.address,
+                        ticketPrice * numOfTickets,
+                      ],
+                    });
+                    return trx;
+                  }}
+                  onTransactionConfirmed={(trx) => {
+                    setApproved(true);
+                  }}
+                  style={{
+                    backgroundColor: "transparent",
+                    color: "#FFF",
+                    padding: "20px",
+                    border: "1px solid white",
+                    width: "100%",
+                    marginTop: "30px",
+                    borderRadius: "50px",
+                  }}
+                  text="Approve First"
+                />
+              ))}
+          </button>
         </div>
       </div>
     </div>

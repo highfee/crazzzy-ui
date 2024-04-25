@@ -2,12 +2,12 @@
 
 import { resolveMethod } from "thirdweb";
 import { useReadContract } from "thirdweb/react";
-import { contract } from "@/utils/constants";
+import { raffleContract, hideMiddlePart } from "@/utils/constants";
 import { ethers } from "ethers";
 
 const Participants = () => {
   const { data, isLoading } = useReadContract({
-    contract,
+    contract: raffleContract,
     method: resolveMethod("getRaffleDetails"),
     params: [1],
   });
@@ -37,7 +37,7 @@ const Participants = () => {
               <div className="flex gap-4 items-center">
                 <div className="h-12 aspect-square bg-slate-500 rounded-full"></div>
                 <div>
-                  <p>{participant}</p>
+                  <p>{hideMiddlePart(participant)}</p>
                   <p className="text-gray-500 text-sm md:hidden">
                     {getTicketCount(participant, index)} Tickets
                   </p>

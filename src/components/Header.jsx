@@ -87,7 +87,7 @@ const Header = () => {
             </div>
           </div>
 
-          <hr className="absolute left-0 right-0 border-0 p-[0.5px] bg-[#1d1d29] top-16 hidden lg:block" />
+          <hr className="absolute left-0 right-0 border-0 p-[0.5px] bg-[#1d1d29] top-20 hidden lg:block" />
         </section>
       </ContainerLayout>
     </div>

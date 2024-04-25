@@ -56,15 +56,32 @@ export const cronosTestnet = defineChain({
 });
 
 // connect to your contract
-export const contract = getContract({
+export const raffleContract = getContract({
   client,
   chain: defineChain(338),
-  address: "0x15a4D6Fd878Ce16Eb8df3b777378BDF1f8Cf94eA",
+  address: "0x03341c63F4C5d70A1b9FF1ABB8Cd896523578477",
+});
+export const crmTokenContract = getContract({
+  client,
+  chain: defineChain(338),
+  address: "0xDBF048c4C1b4a0474a2b3682b0C813C78FE0c54c",
 });
 
-export function hideMiddlePart(str, startChars, endChars) {
+export function hideMiddlePart(str) {
   const placeholder = ".";
-  const middleChars = str.length - startChars - endChars;
-  const hiddenPart = placeholder.repeat(Math.max(0, middleChars));
-  return str.slice(0, startChars) + hiddenPart + str.slice(-endChars);
+
+  return str.slice(0, 7) + placeholder.repeat(10) + str.slice(-6);
 }
+
+export const getRaffleEndTime = (endTime) => {
+  let now = Math.floor(Date.now() / 1000);
+
+  let diff = endTime - now;
+
+  const days = Math.floor(diff / (60 * 60 * 24));
+  const hours = Math.floor((diff % (60 * 60 * 24)) / (60 * 60));
+  const minutes = Math.floor((diff % (60 * 60)) / 60);
+  const seconds = Math.floor(diff % 60);
+
+  return { days, hours, minutes, seconds };
+};
