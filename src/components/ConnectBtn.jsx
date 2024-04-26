@@ -6,7 +6,7 @@ import { client } from "@/utils/constants";
 import { cronosTestnet } from "@/utils/constants";
 
 const wallets = [
-  inAppWallet(),
+  // inAppWallet(),
   createWallet("io.metamask"),
   createWallet("com.coinbase.wallet"),
   createWallet("me.rainbow"),

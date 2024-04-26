@@ -16,9 +16,10 @@ import {
   getRaffleEndTime,
   crmTokenContract,
 } from "@/utils/constants";
-import { useReadContract, useActiveAccount } from "thirdweb/react";
+import { useActiveAccount } from "thirdweb/react";
 
 import { ethers } from "ethers";
+import { toast } from "sonner";
 
 const tokens = [
   { name: "$CRO", value: "cro" },
@@ -26,7 +27,7 @@ const tokens = [
   { name: "$CBT", value: "cbt" },
 ];
 
-const Enter = () => {
+const Enter = ({ data, isLoading }) => {
   const [raffle, setRaffle] = useState([]);
   const [open, setOpen] = useState(true);
   const [numOfTickets, setNumberOfTickets] = useState(0);
@@ -35,12 +36,6 @@ const Enter = () => {
 
   const activeAccount = useActiveAccount();
 
-  const { data, isLoading } = useReadContract({
-    contract: raffleContract,
-    method: resolveMethod("getRaffleDetails"),
-    params: [1],
-  });
-
   const getAllowance = async () => {
     const data = await readContract({
       contract: crmTokenContract,
@@ -48,9 +43,6 @@ const Enter = () => {
       params: [activeAccount?.address, raffleContract.address],
     });
     setAllowance(data);
-    // if (data == 0) {
-    //   setApproved(false);
-    // }
   };
 
   useEffect(() => {
@@ -58,7 +50,7 @@ const Enter = () => {
     if (!isLoading && data) {
       setRaffle(data);
     }
-  }, [allowance, isLoading, approved, activeAccount, numOfTickets]);
+  }, [allowance, isLoading, approved, activeAccount, numOfTickets, data]);
 
   if (isLoading) return <div>loading...</div>;
 
@@ -155,64 +147,83 @@ const Enter = () => {
             </div>
           )}
 
-          <button
+          {/* <button
             className="w-full disabled:cursor-not-allowed disabled:opacity-50"
             disabled={numOfTickets === 0}
-          >
-            {open &&
-              (approved && allowance >= ticketPrice * numOfTickets ? (
-                <TransactionBtn
-                  transaction={() => {
-                    const trx = prepareContractCall({
-                      contract: raffleContract,
-                      method: resolveMethod("joinRaffle"),
-                      // params: [raffleId, numOfTickets, _token],
-                      params: [1, numOfTickets, crmTokenContract.address],
-                    });
-                    return trx;
-                  }}
-                  onTransactionConfirmed={(trx) => {}}
-                  style={{
-                    backgroundColor: "transparent",
-                    color: "#FFF",
-                    padding: "20px",
-                    border: "1px solid white",
-                    width: "100%",
-                    marginTop: "30px",
-                    borderRadius: "50px",
-                  }}
-                  text="Buy Ticket(s)"
-                />
-              ) : (
-                <TransactionBtn
-                  transaction={() => {
-                    const trx = prepareContractCall({
-                      contract: crmTokenContract,
-                      method: resolveMethod("approve"),
-                      // params: [raffleId, numOfTickets, _token],
-                      params: [
-                        raffleContract.address,
-                        ticketPrice * numOfTickets,
-                      ],
-                    });
-                    return trx;
-                  }}
-                  onTransactionConfirmed={(trx) => {
-                    setApproved(true);
-                  }}
-                  style={{
-                    backgroundColor: "transparent",
-                    color: "#FFF",
-                    padding: "20px",
-                    border: "1px solid white",
-                    width: "100%",
-                    marginTop: "30px",
-                    borderRadius: "50px",
-                  }}
-                  text="Approve First"
-                />
-              ))}
-          </button>
+          > */}
+          {open &&
+            (approved && allowance >= ticketPrice * numOfTickets ? (
+              <TransactionBtn
+                transaction={() => {
+                  if (numOfTickets == 0)
+                    return alert("Please select a number of tickets");
+                  const trx = prepareContractCall({
+                    contract: raffleContract,
+                    method: resolveMethod("joinRaffle"),
+                    params: [1, numOfTickets, crmTokenContract.address],
+                  });
+                  return trx;
+                }}
+                onTransactionConfirmed={(trx) => {
+                  console.log(trx);
+                  toast("Success", {
+                    description: "You have successfully bought your ticket(s)",
+                    action: {
+                      label: "View",
+                      onClick: () => {
+                        window.open(
+                          "https://cronos.org/explorer/testnet3/tx/" +
+                            trx.transactionHash,
+                          "_blank"
+                        );
+                      },
+                    },
+                  });
+                }}
+                style={{
+                  backgroundColor: "transparent",
+                  color: "#FFF",
+                  padding: "20px",
+                  border: "1px solid white",
+                  width: "100%",
+                  marginTop: "30px",
+                  borderRadius: "50px",
+                }}
+                text="Buy Ticket(s)"
+                onError={(err) => toast("", { description: err.message })}
+              />
+            ) : (
+              <TransactionBtn
+                transaction={() => {
+                  if (numOfTickets == 0)
+                    return alert("Please select a number of tickets");
+                  const trx = prepareContractCall({
+                    contract: crmTokenContract,
+                    method: resolveMethod("approve"),
+                    params: [
+                      raffleContract.address,
+                      ticketPrice * numOfTickets,
+                    ],
+                  });
+                  return trx;
+                }}
+                onTransactionConfirmed={(trx) => {
+                  setApproved(true);
+                  console.log(trx);
+                }}
+                onError={(err) => toast("", { description: err.message })}
+                style={{
+                  backgroundColor: "transparent",
+                  color: "#FFF",
+                  padding: "20px",
+                  border: "1px solid white",
+                  width: "100%",
+                  marginTop: "30px",
+                  borderRadius: "50px",
+                }}
+                text="Approve First"
+              />
+            ))}
         </div>
       </div>
     </div>

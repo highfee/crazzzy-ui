@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/sheet";
 import ConnectBtn from "./ConnectBtn";
 
+import { usePathname } from "next/navigation";
+
 const rubik = Rubik_Bubbles({
   subsets: ["latin"],
   weight: ["400"],
@@ -29,7 +31,7 @@ const links = [
   },
   {
     name: "Raffle",
-    path: "/raffle",
+    path: "/raffles",
   },
   {
     name: "Auctions",
@@ -42,13 +44,17 @@ const links = [
 ];
 
 const Header = () => {
+  const path = usePathname();
+
+  const logo = path.includes("raffles") ? "/raffle.png" : "/staking.png";
+
   return (
     <div className=" sticky top-0 py-4 bg-[#15151f] z-50">
       <ContainerLayout>
         <section className="flex items-center justify-between relative">
           <div className="flex items-center gap-10">
             <Link href="/" className="flex items-center gap-3">
-              <Image src="/raffle.png" alt="" height={30} width={300} />
+              <Image src={logo} alt="" height={30} width={300} />
               {/* <p className="text-xl hidden md:block">Crazzzy Monsters</p> */}
             </Link>
             <div className=" gap-8 text-lg hidden lg:flex">
@@ -61,13 +67,6 @@ const Header = () => {
           </div>
 
           <div className="flex gap-2 items-center">
-            {/* <ConnectWallet
-              dropdownPosition={{
-                side: "bottom",
-                align: "right",
-              }}
-              switchToActiveChain
-            /> */}
             <ConnectBtn />
             <div className="lg:hidden">
               <Sheet className="top-20 bg-white max-h-fit">
