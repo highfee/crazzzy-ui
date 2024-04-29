@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ethers } from "ethers";
 import { getNFT } from "thirdweb/extensions/erc721";
 import { createThirdwebClient, defineChain, getContract } from "thirdweb";
+import { Skeleton } from "./ui/skeleton";
 
 function formatNumber(num) {
   if (num >= 1000 && num < 1000000) {
@@ -23,7 +24,9 @@ const client = createThirdwebClient({
 });
 
 const Raffle = ({ raffle }) => {
-  const [raffleImg, setRaffleImg] = useState("");
+  const [isLoading, setIsloading] = useState(!true);
+
+  const [nft, setNft] = useState(null);
 
   const contract = getContract({
     client,
@@ -32,17 +35,29 @@ const Raffle = ({ raffle }) => {
   });
 
   const getSingleNFT = async () => {
-    const nft = await getNFT({
+    const NFT = await getNFT({
       contract,
       tokenId: raffle.tokenId,
     });
+
+    setNft(NFT.metadata);
+
+    setIsloading(false);
+
+    // return NFT.metadata;
   };
 
-  getSingleNFT();
+  useEffect(() => {
+    getSingleNFT();
+  });
 
   const imgLoader = (url) => {
     return url;
   };
+
+  const nftImageUrl = nft?.image
+    ? "https://ipfs.io/ipfs/" + nft?.image?.split("ipfs://")[1]
+    : "/no-media.png";
 
   return (
     <div>
@@ -50,7 +65,12 @@ const Raffle = ({ raffle }) => {
         <div className=" rounded-2xl bg-[#1d1d29] p-5 flex justify-between gap-10 hover:scale-10 hover:scale-95">
           <div>
             <p className="text-xs p-2 px-6 border rounded-3xl w-fit">NFT</p>
-            <p className="text-lg mt-5">Crazzzy Monster #12</p>
+
+            {isLoading ? (
+              <Skeleton className="w-40 h-3 rounded-2xl bg-slate-700" />
+            ) : (
+              <p className="text-lg mt-5">{nft?.name || "N/A"}</p>
+            )}
 
             <p className="text-sm text-gray-400 mt-6">
               {formatNumber(raffle.players.length)} Participants
@@ -61,18 +81,19 @@ const Raffle = ({ raffle }) => {
             <p className="mb-5 text-right text-lg text-gray-300">
               {ethers.utils.formatUnits(raffle.entryCost)} CRO
             </p>
-            <Image
-              loader={() =>
-                imgLoader(
-                  "https://ipfs.io/ipfs/QmcDkEBaugW744s1XEzUPA5auVAJn2MM18PjFH3sx1RHEd/1.png"
-                )
-              }
-              src="https://ipfs.io/ipfs/QmcDkEBaugW744s1XEzUPA5auVAJn2MM18PjFH3sx1RHEd/1.png"
-              alt=""
-              height={150}
-              width={150}
-              className="rounded-xl  object-cover"
-            />
+
+            {isLoading ? (
+              <Skeleton className=" h-[150px] aspect-square bg-slate-700" />
+            ) : (
+              <Image
+                loader={() => imgLoader(nftImageUrl)}
+                src={nftImageUrl}
+                alt=""
+                height={150}
+                width={150}
+                className="rounded-xl object-cover h-[140px]  aspect-square"
+              />
+            )}
           </div>
         </div>
       </Link>

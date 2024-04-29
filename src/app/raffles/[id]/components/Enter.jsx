@@ -160,12 +160,15 @@ const Enter = ({ data, isLoading }) => {
                   const trx = prepareContractCall({
                     contract: raffleContract,
                     method: resolveMethod("joinRaffle"),
-                    params: [1, numOfTickets, crmTokenContract.address],
+                    params: [
+                      data[7].toString() - 1,
+                      numOfTickets,
+                      crmTokenContract.address,
+                    ],
                   });
                   return trx;
                 }}
                 onTransactionConfirmed={(trx) => {
-                  console.log(trx);
                   toast("Success", {
                     description: "You have successfully bought your ticket(s)",
                     action: {
