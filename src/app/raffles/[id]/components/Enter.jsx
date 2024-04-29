@@ -22,9 +22,9 @@ import { ethers } from "ethers";
 import { toast } from "sonner";
 
 const tokens = [
-  { name: "$CRO", value: "cro" },
-  { name: "$FRTN", value: "frtn" },
-  { name: "$CBT", value: "cbt" },
+  { name: "CRO", value: "cro" },
+  { name: "FRTN", value: "frtn" },
+  { name: "CBT", value: "cbt" },
 ];
 
 const Enter = ({ data, isLoading }) => {
@@ -90,7 +90,7 @@ const Enter = ({ data, isLoading }) => {
         {open && (
           <div className="flex justify-between">
             <p className="text-gray-500">Ticket Price</p>
-            <p className="text-xl">50 CRO</p>
+            <p className="text-xl">{ethers.utils.formatUnits(data[6])} CRO</p>
           </div>
         )}
 

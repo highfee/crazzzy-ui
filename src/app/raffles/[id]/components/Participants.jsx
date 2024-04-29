@@ -6,12 +6,6 @@ import { raffleContract, hideMiddlePart } from "@/utils/constants";
 import { ethers } from "ethers";
 
 const Participants = ({ data, isLoading }) => {
-  // const { data, isLoading } = useReadContract({
-  //   contract: raffleContract,
-  //   method: resolveMethod("getRaffleDetails"),
-  //   params: [1],
-  // });
-
   const getTicketCount = (participant) => {
     let count = 0;
 

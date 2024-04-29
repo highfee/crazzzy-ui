@@ -1,21 +1,41 @@
+"use client";
+
 import ContainerLayout from "@/components/Container";
 import Raffle from "@/components/Raffle";
-import React from "react";
 
-const page = () => {
+import { resolveMethod } from "thirdweb";
+import { useReadContract } from "thirdweb/react";
+
+import { raffleContract } from "@/utils/constants";
+
+import { Skeleton } from "@/components/ui/skeleton";
+
+const RafflesPage = () => {
+  const skeletonData = ["", "", "", ""];
+
+  const { data, isLoading } = useReadContract({
+    contract: raffleContract,
+    method: resolveMethod("getAllRaffles"),
+    params: [],
+  });
+
   return (
     <div className="mt-20">
       <ContainerLayout>
         <div className="gap-10 raffles">
-          <Raffle />
-          <Raffle />
-          <Raffle />
-          <Raffle />
-          <Raffle />
+          {isLoading &&
+            skeletonData.map((_) => (
+              <Skeleton className="w-full h-[235px] bg-slate-800" key={_} />
+            ))}
+
+          {!isLoading &&
+            data.reverse().map((item, index) => {
+              return <Raffle key={index} raffle={item} />;
+            })}
         </div>
       </ContainerLayout>
     </div>
   );
 };
 
-export default page;
+export default RafflesPage;

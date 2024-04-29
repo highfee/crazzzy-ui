@@ -59,7 +59,7 @@ export const cronosTestnet = defineChain({
 export const raffleContract = getContract({
   client,
   chain: defineChain(338),
-  address: "0x03341c63F4C5d70A1b9FF1ABB8Cd896523578477",
+  address: "0x899e98326c7457915bc493a75Bb423077F9bbB3b",
 });
 export const crmTokenContract = getContract({
   client,
