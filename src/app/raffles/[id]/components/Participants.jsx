@@ -1,9 +1,8 @@
 "use client";
 
-import { resolveMethod } from "thirdweb";
-import { useReadContract } from "thirdweb/react";
-import { raffleContract, hideMiddlePart } from "@/utils/constants";
-import { ethers } from "ethers";
+import { hideMiddlePart } from "@/utils/constants";
+
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Participants = ({ data, isLoading }) => {
   const getTicketCount = (participant) => {
@@ -23,7 +22,7 @@ const Participants = ({ data, isLoading }) => {
       <h1 className="text-xl">Raffle Participants</h1>
 
       {isLoading ? (
-        <div>Loading...</div>
+        <Loader />
       ) : (
         data[4].map((participant, index) => (
           <div className="flex flex-col gap-4 mt-5" key={index}>
@@ -49,3 +48,25 @@ const Participants = ({ data, isLoading }) => {
 };
 
 export default Participants;
+
+const Loader = () => {
+  const data = ["", "", ""];
+  return data.map((item, index) => (
+    <div className="flex flex-col gap-4 mt-5" key={index}>
+      <div className="flex items-center justify-between ">
+        <div className="flex gap-4 items-center">
+          <Skeleton className="h-12 aspect-square bg-slate-500 rounded-full" />
+          <div>
+            <Skeleton className="w-full h-10" />
+            <p className="text-gray-500 text-sm md:hidden">
+              <Skeleton className="w-14 h-10 bg-[#1d1d29]" />
+            </p>
+          </div>
+        </div>
+        <p className="text-gray-500 text-sm hidden md:block">
+          <Skeleton className="w-14 h-10 bg-[#1d1d29]" />
+        </p>
+      </div>
+    </div>
+  ));
+};

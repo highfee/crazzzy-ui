@@ -19,9 +19,7 @@ function formatNumber(num) {
   }
 }
 
-const client = createThirdwebClient({
-  clientId: "1639134fe6d77249631aa361f3a9cbe1",
-});
+import { client } from "@/utils/constants";
 
 const Raffle = ({ raffle }) => {
   const [isLoading, setIsloading] = useState(!true);
