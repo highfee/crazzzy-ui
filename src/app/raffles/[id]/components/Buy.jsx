@@ -146,10 +146,6 @@ const Buy = ({ open, ticketPrice, data }) => {
               });
               return trx;
             }}
-            onTransactionConfirmed={(trx) => {
-              setApproved(true);
-              console.log(trx);
-            }}
             onError={(err) => toast("", { description: err.message })}
             style={{
               backgroundColor: "transparent",
