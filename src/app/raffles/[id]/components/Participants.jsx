@@ -57,7 +57,7 @@ const Loader = () => {
         <div className="flex gap-4 items-center">
           <Skeleton className="h-12 aspect-square bg-slate-500 rounded-full" />
           <div>
-            <Skeleton className="w-full h-10" />
+            <Skeleton className="w-full h-10 flex-1 bg-[#1d1d29]" />
             <p className="text-gray-500 text-sm md:hidden">
               <Skeleton className="w-14 h-10 bg-[#1d1d29]" />
             </p>
