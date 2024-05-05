@@ -28,10 +28,14 @@ const RafflesPage = () => {
               <Skeleton className="w-full h-[235px] bg-slate-800" key={_} />
             ))}
 
-          {!isLoading &&
-            data.reverse().map((item, index) => {
+          {data?.length < 1 ? (
+            <p className="text-xl">No raffle, Check back later</p>
+          ) : (
+            !isLoading &&
+            data?.reverse().map((item, index) => {
               return <Raffle key={index} raffle={item} />;
-            })}
+            })
+          )}
         </div>
       </ContainerLayout>
     </div>

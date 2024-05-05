@@ -59,12 +59,13 @@ export const cronosTestnet = defineChain({
 export const raffleContract = getContract({
   client,
   chain: defineChain(338),
-  address: "0x899e98326c7457915bc493a75Bb423077F9bbB3b",
+  address: "0x896667ffd62A3450FF72254Eacab47396898369E",
 });
-export const crmTokenContract = getContract({
+
+export const cbtTokenContract = getContract({
   client,
   chain: defineChain(338),
-  address: "0xDBF048c4C1b4a0474a2b3682b0C813C78FE0c54c",
+  address: "0x0d7e3f35d3F515E9E8491fbF9353D16Ca0E9F368",
 });
 
 export function hideMiddlePart(str) {

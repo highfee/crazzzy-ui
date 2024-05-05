@@ -41,8 +41,6 @@ const Raffle = ({ raffle }) => {
     setNft(NFT.metadata);
 
     setIsloading(false);
-
-    // return NFT.metadata;
   };
 
   useEffect(() => {

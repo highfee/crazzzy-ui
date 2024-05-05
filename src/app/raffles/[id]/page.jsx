@@ -10,6 +10,7 @@ import { defineChain, getContract, resolveMethod } from "thirdweb";
 import { raffleContract } from "@/utils/constants";
 import { getNFT } from "thirdweb/extensions/erc721";
 import { client } from "@/utils/constants";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const RafflePage = ({ params }) => {
   const [nft, setNft] = useState(null);
@@ -41,11 +42,24 @@ const RafflePage = ({ params }) => {
     <ContainerLayout>
       <div className="mt-20 flex gap-20 max-w-[1200px] mx-auto flex-wrap">
         <div className="flex-1 flex-grow-[2] basis-[300px">
-          <NFT nft={nft} isLoading={isLoading} />
+          {isLoading ? (
+            <Skeleton className="w-full h-[400px] bg-[#1d1d29] rounded-3xl" />
+          ) : (
+            <NFT nft={nft} isLoading={isLoading} />
+          )}
         </div>
         <div className="flex-1 flex-grow-[3] flex flex-col gap-16">
-          <Enter data={data} isLoading={isLoading} nft={nft} />
-          <Participants data={data} isLoading={isLoading} />
+          {isLoading ? (
+            <div className="flex-1 flex-grow-[3] flex flex-col gap-16">
+              <Skeleton className="w-full h-[400px] bg-[#1d1d29] rounded-3xl" />
+              <Skeleton className="w-full h-[400px] bg-[#1d1d29] rounded-3xl" />
+            </div>
+          ) : (
+            <div className="flex-1 flex-grow-[3] flex flex-col gap-16">
+              <Enter data={data} isLoading={isLoading} nft={nft} />
+              <Participants data={data} isLoading={isLoading} />
+            </div>
+          )}
         </div>
       </div>
     </ContainerLayout>
