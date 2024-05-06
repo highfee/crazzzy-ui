@@ -23,18 +23,16 @@ const RafflesPage = () => {
     <div className="mt-20">
       <ContainerLayout>
         <div className="gap-10 raffles">
-          {isLoading &&
-            skeletonData.map((_) => (
-              <Skeleton className="w-full h-[235px] bg-slate-800" key={_} />
-            ))}
-
-          {data?.length < 1 ? (
+          {isLoading ? (
+            skeletonData.map((_, i) => (
+              <Skeleton className="w-full h-[235px] bg-slate-800" key={i} />
+            ))
+          ) : data.length < 1 ? (
             <p className="text-xl">No raffle, Check back later</p>
           ) : (
-            !isLoading &&
-            data?.reverse().map((item, index) => {
-              return <Raffle key={index} raffle={item} />;
-            })
+            data
+              .toReversed()
+              .map((item, index) => <Raffle key={index} raffle={item} />)
           )}
         </div>
       </ContainerLayout>

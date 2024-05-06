@@ -55,11 +55,10 @@ const Header = () => {
           <div className="flex items-center gap-10">
             <Link href="/" className="flex items-center gap-3">
               <Image src={logo} alt="" height={30} width={300} />
-              {/* <p className="text-xl hidden md:block">Crazzzy Monsters</p> */}
             </Link>
             <div className=" gap-8 text-lg hidden lg:flex">
               {links.map((link) => (
-                <Link href={link.path} key={link.path}>
+                <Link href={link.path} key={link.name}>
                   {link.name}
                 </Link>
               ))}
