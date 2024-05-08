@@ -1,4 +1,4 @@
-import { createThirdwebClient, getContract, resolveMethod } from "thirdweb";
+import { createThirdwebClient, getContract } from "thirdweb";
 import { defineChain } from "thirdweb/chains";
 
 export const filters = ["All", "Staked", "Unstaked"];
@@ -67,6 +67,14 @@ export const cbtTokenContract = getContract({
   chain: defineChain(338),
   address: "0x0d7e3f35d3F515E9E8491fbF9353D16Ca0E9F368",
 });
+
+export const getNFTContract = (address) => {
+  return getContract({
+    client,
+    chain: defineChain(338),
+    address,
+  });
+};
 
 export function hideMiddlePart(str) {
   const placeholder = ".";

@@ -5,7 +5,7 @@
 body {
   color: white;
   background: #15151f;
-  padding: 20px 0;
+  padding: 0 0 20px;
 }
 
 .nfts {
@@ -16,4 +16,17 @@ body {
 .raffles {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }

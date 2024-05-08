@@ -11,7 +11,7 @@ const links = [
 export const Navbar = () => {
   return (
     <ContainerLayout>
-      <div className="flex justify-end w-full mt-5  gap-5">
+      <div className="flex justify-end w-full mt-5 gap-2">
         {links.map((item) => (
           <Link
             href={item.path}
@@ -19,6 +19,7 @@ export const Navbar = () => {
             style={{
               cursor: item.active ? "pointer" : "not-allowed",
               opacity: item.active ? "1" : "0.5",
+              pointerEvents: item.active ? "auto" : "none",
             }}
           >
             {item.name}

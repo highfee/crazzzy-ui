@@ -1,6 +1,6 @@
 "use client";
 
-import { ConnectWallet } from "@thirdweb-dev/react";
+import { ConnectWallet, useAccountAdmins } from "@thirdweb-dev/react";
 import Link from "next/link";
 import { Rubik_Bubbles } from "next/font/google";
 import Image from "next/image";
@@ -18,6 +18,8 @@ import {
 import ConnectBtn from "./ConnectBtn";
 
 import { usePathname } from "next/navigation";
+import CreateRaffle from "@/app/admin/components/CreateRaffle";
+import { useActiveAccount } from "thirdweb/react";
 
 const rubik = Rubik_Bubbles({
   subsets: ["latin"],
@@ -41,6 +43,10 @@ const links = [
     name: "Flip Coin",
     path: "/",
   },
+  {
+    name: "Admin",
+    path: "/admin",
+  },
 ];
 
 const Header = () => {
@@ -48,8 +54,10 @@ const Header = () => {
 
   const logo = path.includes("raffles") ? "/raffle.png" : "/staking.png";
 
+  const account = useActiveAccount();
+
   return (
-    <div className=" sticky top-0 py-4 bg-[#15151f] z-50">
+    <div className=" sticky top-0 py-4 bg-[#15151f] z-50 ">
       <ContainerLayout>
         <section className="flex items-center justify-between relative">
           <div className="flex items-center gap-10">
@@ -62,6 +70,7 @@ const Header = () => {
                   {link.name}
                 </Link>
               ))}
+              {path.includes("raffles") && account && <CreateRaffle />}
             </div>
           </div>
 
@@ -79,6 +88,8 @@ const Header = () => {
                         <Link href={link.path}>{link.name}</Link>
                       </SheetClose>
                     ))}
+
+                    {path.includes("raffles") && account && <CreateRaffle />}
                   </div>
                 </SheetContent>
               </Sheet>
