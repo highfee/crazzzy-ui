@@ -62,6 +62,12 @@ export const raffleContract = getContract({
   address: "0x896667ffd62A3450FF72254Eacab47396898369E",
 });
 
+export const stakinContract = getContract({
+  client,
+  chain: defineChain(338),
+  address: "0xc2FcbCe4E255FC293cc3f77cf3De4237649E857e",
+});
+
 export const cbtTokenContract = getContract({
   client,
   chain: defineChain(338),
