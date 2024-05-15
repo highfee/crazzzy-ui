@@ -76,6 +76,12 @@ export const getNFTContract = (address) => {
   });
 };
 
+export const crmContract = getContract({
+  client,
+  chain: defineChain(338),
+  address: "0x6167EC8dfcE64Fe84b03E34091c7Cfb8C67898c0",
+});
+
 export function hideMiddlePart(str) {
   const placeholder = ".";
 
@@ -94,3 +100,30 @@ export const getRaffleEndTime = (endTime) => {
 
   return { days, hours, minutes, seconds };
 };
+
+export const collections = [
+  {
+    name: "OG CM Collection",
+    contract: getContract({
+      client,
+      chain: defineChain(338),
+      address: "0x6167EC8dfcE64Fe84b03E34091c7Cfb8C67898c0",
+    }),
+  },
+  {
+    name: "CRM Collection",
+    contract: getContract({
+      client,
+      chain: defineChain(338),
+      address: "0x6167EC8dfcE64Fe84b03E34091c7Cfb8C67898c0",
+    }),
+  },
+  {
+    name: "HunterZ collection",
+    contract: getContract({
+      client,
+      chain: defineChain(338),
+      address: "0x6167EC8dfcE64Fe84b03E34091c7Cfb8C67898c0",
+    }),
+  },
+];

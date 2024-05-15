@@ -1,13 +1,32 @@
 "use client";
-import { filters, NFT_images } from "@/utils/constants";
+import {
+  filters,
+  NFT_images,
+  crmContract,
+  collections,
+} from "@/utils/constants";
 import Image from "next/image";
 import { useState } from "react";
+import { useActiveAccount } from "thirdweb/react";
+
+import { getOwnedNFTs, getNFTs } from "thirdweb/extensions/erc721";
 
 const NFTs = () => {
+  const account = useActiveAccount();
+
+  const getSingleCollectionNFTsOwnedByUser = async (contract) => {
+    const crmNFT = await getOwnedNFTs({
+      contract,
+      owner: account.address,
+    });
+    return crmNFT;
+  };
+
   const [active, setActive] = useState(filters[0]);
   const imgLoader = (url) => {
     return url;
   };
+
   return (
     <div className="flex-1">
       <header className="flex items-center justify-between">
@@ -47,7 +66,7 @@ const NFTs = () => {
             <p className="my-5">Crazzzy Monster {nft.name}</p>
             <div className="flex justify-between text-sm mb-2">
               <p className="text-gray-400">Earned</p>
-              <p>0.004 eth</p>
+              <p>0.004 cro</p>
             </div>
             <Range length={80} />
             <div className="flex justify-between text-sm mb-5">
