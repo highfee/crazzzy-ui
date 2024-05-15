@@ -1,4 +1,4 @@
-import { Navbar } from "./components/NAvbar";
+import Navbar from "./components/Navbar";
 
 export const metadata = {
   title: "Crazzy Monster",

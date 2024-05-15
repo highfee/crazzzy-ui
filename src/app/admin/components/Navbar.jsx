@@ -8,7 +8,7 @@ const links = [
   { name: "Coin Flip", path: "/admin/raffle", active: false },
 ];
 
-export const Navbar = () => {
+const Navbar = () => {
   return (
     <ContainerLayout>
       <div className="flex justify-end w-full mt-5 gap-2">
@@ -29,3 +29,5 @@ export const Navbar = () => {
     </ContainerLayout>
   );
 };
+
+export default Navbar;
