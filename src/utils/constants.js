@@ -115,7 +115,7 @@ export const collections = [
     contract: getContract({
       client,
       chain: defineChain(338),
-      address: "0x6167EC8dfcE64Fe84b03E34091c7Cfb8C67898c0",
+      address: "0x73Beaf9BF108eB61795C79446Fb565D47976709a",
     }),
   },
   {
