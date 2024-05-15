@@ -24,7 +24,7 @@ const StakingInfo = () => {
             <FaEthereum size={24} fill="white" />
           </div>
           <div>
-            <p className="text-lg">0.12 ETH</p>
+            <p className="text-lg">30 CRO</p>
             <p className="text-gray-400">Available</p>
           </div>
         </div>

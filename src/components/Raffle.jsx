@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 import { ethers } from "ethers";
 import { getNFT } from "thirdweb/extensions/erc721";
-import { createThirdwebClient, defineChain, getContract } from "thirdweb";
+import { defineChain, getContract } from "thirdweb";
 import { Skeleton } from "./ui/skeleton";
 
 function formatNumber(num) {

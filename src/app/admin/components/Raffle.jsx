@@ -57,7 +57,7 @@ const Raffle = ({ raffle }) => {
 
   return (
     <div>
-      <Link href={`/admin/raffles/${parseInt(raffle.raffleId)}`}>
+      <Link href={`/admin/raffle/${parseInt(raffle.raffleId)}`}>
         <div className=" rounded-2xl bg-[#1d1d29] p-5 flex justify-between gap-10 hover:scale-10 hover:scale-95">
           <div>
             <p className="text-xs p-2 px-6 border rounded-3xl w-fit">NFT</p>
