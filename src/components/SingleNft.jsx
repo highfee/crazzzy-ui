@@ -1,7 +1,35 @@
+"use client";
+
 import Image from "next/image";
 import Range from "./Range";
+import {
+  MediaRenderer,
+  useActiveAccount,
+  useReadContract,
+} from "thirdweb/react";
+import { prepareContractCall, resolveMethod } from "thirdweb";
+import { client, getNFTContract, stakinContract } from "@/utils/constants";
 
-const NFT = ({ nft }) => {
+import { Skeleton } from "./ui/skeleton";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import TransactionBtn from "./TransactionBtn";
+import { useState } from "react";
+import { toast } from "sonner";
+
+const NFT = ({ nft, collectionAddress }) => {
+  const { address } = useActiveAccount();
+
+  const { data: isStaked, isLoading } = useReadContract({
+    contract: stakinContract,
+    method: resolveMethod("_isStaked"),
+    params: [collectionAddress, address, parseInt(nft.id.toString())],
+  });
+
   const nftImageUrl = nft?.metadata.image
     ? "https://ipfs.io/ipfs/" + nft?.metadata.image?.split("ipfs://")[1]
     : "/no-media.png";
@@ -32,7 +60,13 @@ const NFT = ({ nft }) => {
         <p>13 hours</p>
       </div>
       <div className="flex justify-between items-center">
-        <button className="py-1 px-6 rounded-3xl border">Stake</button>
+        {isLoading ? (
+          <Skeleton />
+        ) : isStaked ? (
+          <button className="py-1 px-6 rounded-3xl border">Unstake</button>
+        ) : (
+          <StakeNFT nft={nft} collectionAddress={collectionAddress} />
+        )}
 
         <button className="py-1 px-6 rounded-3xl bg-[#7c9938]">Claim</button>
       </div>
@@ -41,3 +75,88 @@ const NFT = ({ nft }) => {
 };
 
 export default NFT;
+
+const StakeNFT = ({ nft, collectionAddress }) => {
+  const [approved, setApproved] = useState(false);
+
+  return (
+    <Dialog className=" backdrop-blur-lg">
+      <DialogTrigger className="group">
+        <button className="py-1 px-6 rounded-3xl border">Stake</button>
+      </DialogTrigger>
+      <DialogContent>
+        <MediaRenderer
+          client={client}
+          src={nft.metadata.image}
+          style={{ minWidth: "100%" }}
+        />
+
+        <DialogFooter>
+          {approved ? (
+            <TransactionBtn
+              transaction={() => {
+                const trx = prepareContractCall({
+                  contract: stakinContract,
+                  method: resolveMethod("softStakeNFT"),
+                  params: [collectionAddress, parseInt(nft.id.toString())],
+                });
+
+                return trx;
+              }}
+              onTransactionConfirmed={(trx) => {
+                toast("Success", {
+                  description: "Your NFT have been staked",
+                  action: {
+                    label: "View",
+                    onClick: () => {
+                      window.open(
+                        "https://cronos.org/explorer/testnet3/tx/" +
+                          trx.transactionHash,
+                        "_blank"
+                      );
+                    },
+                  },
+                });
+
+                setApproved(false);
+              }}
+              onError={(err) => {
+                toast("", { description: err.message });
+              }}
+              text="Stake NFT"
+              style={{
+                border: "1px solid white",
+                padding: "8px 20px ",
+              }}
+            />
+          ) : (
+            <TransactionBtn
+              transaction={() => {
+                const trx = prepareContractCall({
+                  contract: getNFTContract(collectionAddress),
+                  method: resolveMethod("approve"),
+                  params: [stakinContract.address, parseInt(nft.id.toString())],
+                });
+
+                return trx;
+              }}
+              onTransactionConfirmed={(trx) => {
+                toast("Success", { description: "NFT approved" });
+
+                setApproved(true);
+              }}
+              onError={(err) => {
+                toast("", { description: err.message });
+              }}
+              text="Approve"
+              style={{
+                border: "1px solid white",
+                padding: "8px 20px ",
+              }}
+            />
+          )}
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};

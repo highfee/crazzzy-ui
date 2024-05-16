@@ -7,8 +7,10 @@ export default function Home() {
   return (
     <ContainerLayout>
       <main className="mt-20 flex flex-col-reverse lg:flex-row gap-10">
-        <NFTs />
-        <StakingInfo />
+        {/*  <NFTs />
+        <StakingInfo />*/}
+
+        <div className="text-white text-3xl">Story telling</div>
       </main>
     </ContainerLayout>
   );

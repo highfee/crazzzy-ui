@@ -34,7 +34,11 @@ const NFTs = () => {
         const nfts = await getSingleCollectionNFTsOwnedByUser(
           collection.contract
         );
-        nftData.push({ collection: collection.name, nfts });
+        nftData.push({
+          collection: collection.name,
+          collectionAddress: collection.contract.address,
+          nfts,
+        });
       }
 
       setNfts(nftData);
@@ -84,7 +88,13 @@ const NFTs = () => {
                       You don&apos;t have any NFT in this collection
                     </p>
                   ) : (
-                    collection.nfts.map((item) => <NFT key={item} nft={item} />)
+                    collection.nfts.map((item) => (
+                      <NFT
+                        key={item}
+                        nft={item}
+                        collectionAddress={collection.collectionAddress}
+                      />
+                    ))
                   )}
                 </section>
               </AccordionContent>

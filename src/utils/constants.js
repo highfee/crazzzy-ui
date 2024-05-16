@@ -1,7 +1,7 @@
 import { createThirdwebClient, getContract } from "thirdweb";
 import { defineChain } from "thirdweb/chains";
 
-export const filters = ["All", "Staked", "Unstaked"];
+export const filters = ["All", "Hard Staked", "Unstaked"];
 
 export const NFT_images = [
   {
