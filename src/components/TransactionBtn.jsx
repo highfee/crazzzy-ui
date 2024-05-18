@@ -46,7 +46,7 @@ const TransactionBtn = ({
               padding: "20px",
               border: "1px solid white",
               width: "100%",
-              marginTop: "30px",
+
               borderRadius: "50px",
             },
           }}
@@ -56,10 +56,10 @@ const TransactionBtn = ({
           switchButton={{
             label: "Wrong Network",
             style: {
-              padding: "20px",
+              padding: "8px 20px",
               border: "1px solid white",
               width: "100%",
-              marginTop: "30px",
+              // marginTop: "30px",
               borderRadius: "50px",
             },
           }}

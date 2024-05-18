@@ -1,7 +1,13 @@
 import { createThirdwebClient, getContract } from "thirdweb";
 import { defineChain } from "thirdweb/chains";
 
-export const filters = ["All", "Hard Staked", "Unstaked"];
+// export const filters = ["All", "Hard Staked", "Unstaked"];
+
+export const filters = [
+  { name: "Your NFTs", path: "/stake" },
+  { name: "Staked", path: "/stake/staked" },
+  // { name: "Unstaked", path: "/stake/unstaked" },
+];
 
 export const NFT_images = [
   {
@@ -55,7 +61,7 @@ export const cronosTestnet = defineChain({
   id: 338,
 });
 
-// connect to your contract
+// connect to  contract
 export const raffleContract = getContract({
   client,
   chain: defineChain(338),
@@ -65,8 +71,18 @@ export const raffleContract = getContract({
 export const stakinContract = getContract({
   client,
   chain: defineChain(338),
-  address: "0xc2FcbCe4E255FC293cc3f77cf3De4237649E857e",
+  address: "0x095431FF0DA581b727001A990Df9f0C4d96cC95E",
 });
+// export const stakinContract = getContract({
+//   client,
+//   chain: defineChain(338),
+//   address: "0x0d7e3f35d3F515E9E8491fbF9353D16Ca0E9F368",
+// });
+// export const stakinContract = getContract({
+//   client,
+//   chain: defineChain(338),
+//   address: "0xc2FcbCe4E255FC293cc3f77cf3De4237649E857e",
+// });
 
 export const cbtTokenContract = getContract({
   client,

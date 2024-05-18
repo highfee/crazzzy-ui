@@ -1,5 +1,5 @@
 "use client";
-import { filters, collections } from "@/utils/constants";
+import { collections } from "@/utils/constants";
 import { useEffect, useState } from "react";
 import { useActiveAccount } from "thirdweb/react";
 
@@ -49,26 +49,8 @@ const NFTs = () => {
     }
   }, [account]);
 
-  const [active, setActive] = useState(filters[0]);
-
   return (
     <div className="flex-1">
-      <header className="flex items-center justify-between">
-        <p className="text-white text-2xl hidden md:block">My NFTs</p>
-        <div className="flex py-2 px-3 bg-[#1d1d29] rounded-lg">
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              className={`py-1 px-4 ${
-                active == filter && "bg-[#7c7caa5b]"
-              } rounded-lg`}
-              onClick={() => setActive(filter)}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
-      </header>
       <div className="my-5 flex items-center gap-3">
         <button className="py-1 px-5 rounded-md border">Stake all</button>
         <button className="py-1 px-5 rounded-md bg-[#7C9938] text-white border border-[#7C9938]">
