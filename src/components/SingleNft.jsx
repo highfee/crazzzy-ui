@@ -76,8 +76,12 @@ const StakeNFT = ({ nft, collectionAddress }) => {
                 transaction={() => {
                   const trx = prepareContractCall({
                     contract: stakinContract,
-                    method: resolveMethod("softStakeNFT"),
-                    params: [collectionAddress, parseInt(nft.id.toString())],
+                    method: resolveMethod("stakeNFT"),
+                    params: [
+                      collectionAddress,
+                      parseInt(nft.id.toString()),
+                      false,
+                    ],
                   });
 
                   return trx;
@@ -112,8 +116,12 @@ const StakeNFT = ({ nft, collectionAddress }) => {
                 transaction={() => {
                   const trx = prepareContractCall({
                     contract: stakinContract,
-                    method: resolveMethod("hardStakeNFT"),
-                    params: [collectionAddress, parseInt(nft.id.toString())],
+                    method: resolveMethod("stakeNFT"),
+                    params: [
+                      collectionAddress,
+                      parseInt(nft.id.toString()),
+                      true,
+                    ],
                   });
 
                   return trx;

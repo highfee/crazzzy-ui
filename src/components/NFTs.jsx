@@ -6,6 +6,8 @@ import { useActiveAccount } from "thirdweb/react";
 import { getOwnedNFTs } from "thirdweb/extensions/erc721";
 import NFT from "./SingleNft";
 
+import { useDispatch } from "react-redux";
+import { setUserNFT } from "@/context/stakingSlice";
 import {
   Accordion,
   AccordionContent,
@@ -14,6 +16,7 @@ import {
 } from "@/components/ui/accordion";
 
 const NFTs = () => {
+  const dispatch = useDispatch();
   const account = useActiveAccount();
 
   const [nfts, setNfts] = useState([]);
@@ -25,6 +28,15 @@ const NFTs = () => {
     });
     return crmNFT;
   };
+
+  function getTotalNFTs(data) {
+    let total = 0;
+    data.map((item) => {
+      total += item.nfts.length;
+    });
+    console.log(total);
+    return total;
+  }
 
   useEffect(() => {
     const getAllNFTsOwnedByUserInAllCollections = async () => {
@@ -42,6 +54,8 @@ const NFTs = () => {
       }
 
       setNfts(nftData);
+      dispatch(setUserNFT(getTotalNFTs(nftData)));
+      // dispatch(setUserNFT(20));
     };
 
     if (account) {

@@ -1,46 +1,59 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { setStaked } from "@/context/stakingSlice";
 import { stakinContract } from "@/utils/constants";
-import { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { resolveMethod } from "thirdweb";
 import { useActiveAccount, useReadContract } from "thirdweb/react";
+
+import { Skeleton } from "@/components/ui/skeleton";
 
 import NFT from "@/components/StakedNFTComponent";
 
 const StakedNFTPage = () => {
-  const account = useActiveAccount();
+  const transformNFT = (data) => {
+    return data.map((nft) => ({
+      ...nft,
+      tokenId: parseInt(nft.tokenId.toString()),
+      accumulatedReward: parseInt(nft.accumulatedReward.toString()),
+      stakedAt: parseInt(nft.stakedAt.toString()),
 
-  const [NFTs, setNFTs] = useState([]);
+      lastClaimedAt: parseInt(nft.lastClaimedAt.toString()),
+    }));
+  };
+  const dispatch = useDispatch();
+
+  const account = useActiveAccount();
 
   const { data: stakedNFTS, isLoading } = useReadContract({
     contract: stakinContract,
-    method: resolveMethod("getUserStakedNFTs"),
+    method: resolveMethod("getAllStakedNFTs"),
     params: [account && account.address],
   });
 
   useEffect(() => {
-    if (stakedNFTS && stakedNFTS.length > 0) {
-      const transformedNFTs = stakedNFTS[1].map((tokenId, index) => {
-        return [stakedNFTS[0][index], parseInt(tokenId.toString())];
-      });
-      setNFTs(transformedNFTs);
-    } else {
-      setNFTs([]);
+    if (!isLoading) {
+      dispatch(setStaked(transformNFT(stakedNFTS)));
     }
   }, [stakedNFTS]);
 
   return (
     <div>
       {isLoading ? (
-        <div className="nfts">
-          <Skeleton className="bg-white h-[300p] w-full" />
-          <Skeleton className="bg-white h-[300p] w-full" />
-          <Skeleton className="bg-white h-[300p] w-full" />
+        <div className="nfts mt-10">
+          <Skeleton className="bg-[#1D1D29] h-[400px] w-full" />
+          <Skeleton className="bg-[#1D1D29] h-[400px] w-full" />
+          <Skeleton className="bg-[#1D1D29] h-[400px] w-full" />
         </div>
+      ) : stakedNFTS?.length < 1 ? (
+        <p className="text-xl text-gray-300 mt-10">
+          You do not have any NFT staked, you can go to your NFTs and start
+          staking NFTs
+        </p>
       ) : (
         <div className="nfts mt-10">
-          {NFTs.map((item) => (
+          {stakedNFTS.map((item) => (
             <NFT key={item} nft={item} />
           ))}
         </div>

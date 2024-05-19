@@ -1,7 +1,12 @@
 import { FaEthereum } from "react-icons/fa";
 import React from "react";
 
+import { useSelector } from "react-redux";
+
 const StakingInfo = () => {
+  const staked = useSelector((state) => state.staking.staked);
+
+  const userNFT = useSelector((state) => state.staking.userNFT);
   return (
     <div className="max-w-[350px] basis-[300px]">
       <div className="p-5 bg-[#1d1d29] rounded-xl mb-5">
@@ -9,11 +14,11 @@ const StakingInfo = () => {
         <div className="flex flex-col gap-4 mt-5">
           <div className="flex justify-between items-center text-gray-400">
             <p>Total monsters</p>
-            <p>16</p>
+            <p>{userNFT}</p>
           </div>
           <div className="flex justify-between items-center text-gray-400">
             <p>Total staked monsters</p>
-            <p>4</p>
+            <p>{staked.length}</p>
           </div>
         </div>
       </div>
