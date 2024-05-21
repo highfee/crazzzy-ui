@@ -18,7 +18,7 @@ const StakingInfo = () => {
 
   const userNFT = useSelector((state) => state.staking.userNFT);
 
-  const { data, isLoading } = useReadContract({
+  const data = useReadContract({
     contract: stakinContract,
     method:
       "function getTotalRewards(address owner) public view returns (uint256)",

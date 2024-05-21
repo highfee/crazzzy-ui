@@ -51,6 +51,8 @@ const Stakingpage = () => {
 
       setNfts(nftData);
       dispatch(setUserNFT(getTotalNFTs(nftData)));
+
+      console.log(nftData);
     };
     if (!isLoading) {
       dispatch(setStaked(transformOwnedNFT(stakedNFTS)));
@@ -62,6 +64,11 @@ const Stakingpage = () => {
     <NFTs nfts={nfts} />
   ) : (
     <div>
+      <div className="my-5 flex items-center gap-3">
+        <button className="py-1 px-5 rounded-md bg-[#7C9938] text-white border border-[#7C9938]">
+          Unstake all
+        </button>
+      </div>
       <StakedNFTPage />
     </div>
   );

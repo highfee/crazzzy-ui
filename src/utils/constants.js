@@ -1,5 +1,6 @@
 import { createThirdwebClient, getContract } from "thirdweb";
 import { defineChain } from "thirdweb/chains";
+import { getOwnedNFTs } from "thirdweb/extensions/erc721";
 
 // export const filters = ["All", "Hard Staked", "Unstaked"];
 
