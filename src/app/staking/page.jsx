@@ -16,8 +16,10 @@ import { useDispatch } from "react-redux";
 import { resolveMethod } from "thirdweb";
 import { useActiveAccount, useReadContract } from "thirdweb/react";
 import StakedNFTPage from "@/components/StakedNFTs";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Stakingpage = () => {
+  const [loadingNFTs, setLoadingNFTs] = useState(true);
   const [nfts, setNfts] = useState([]);
 
   const searchParams = useSearchParams();
@@ -52,6 +54,8 @@ const Stakingpage = () => {
 
       setNfts(nftData);
       dispatch(setUserNFT(getTotalNFTs(nftData)));
+
+      setLoadingNFTs(false);
     };
     if (!isLoading) {
       dispatch(setStaked(transformOwnedNFT(stakedNFTS)));
@@ -60,7 +64,17 @@ const Stakingpage = () => {
   }, [stakedNFTS, view]);
 
   return view == "all" ? (
-    <NFTs nfts={nfts} />
+    <>
+      {loadingNFTs ? (
+        <div className="flex flex-col gap-10 mt-8">
+          <Skeleton className="w-full h-20 rounded-2xl bg-[#1D1D29]" />
+          <Skeleton className="w-full h-20 rounded-2xl bg-[#1D1D29]" />
+          <Skeleton className="w-full h-20 rounded-2xl bg-[#1D1D29]" />
+        </div>
+      ) : (
+        <NFTs nfts={nfts} />
+      )}
+    </>
   ) : (
     <div>
       <div className="my-5 flex items-center gap-3">
