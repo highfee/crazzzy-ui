@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 
 import NFTs from "@/components/NFTs";
-import { setStaked } from "@/context/stakingSlice";
+import { setStaked, setUserNFT } from "@/context/stakingSlice";
 import {
   collections,
   getSingleCollectionNFTsOwnedByUser,
@@ -52,8 +52,6 @@ const Stakingpage = () => {
 
       setNfts(nftData);
       dispatch(setUserNFT(getTotalNFTs(nftData)));
-
-      console.log(nftData);
     };
     if (!isLoading) {
       dispatch(setStaked(transformOwnedNFT(stakedNFTS)));
