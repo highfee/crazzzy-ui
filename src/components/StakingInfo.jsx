@@ -25,7 +25,7 @@ const StakingInfo = () => {
     params: [address],
   });
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className="max-w-[350px] basis-[300px]">

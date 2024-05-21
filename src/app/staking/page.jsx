@@ -40,7 +40,8 @@ const Stakingpage = () => {
 
       for (const collection of collections) {
         const nfts = await getSingleCollectionNFTsOwnedByUser(
-          collection.contract
+          collection.contract,
+          account
         );
         nftData.push({
           collection: collection.name,
@@ -58,7 +59,7 @@ const Stakingpage = () => {
       dispatch(setStaked(transformOwnedNFT(stakedNFTS)));
       getAllNFTsOwnedByUserInAllCollections();
     }
-  }, [stakedNFTS]);
+  }, [stakedNFTS, view]);
 
   return view == "all" ? (
     <NFTs nfts={nfts} />

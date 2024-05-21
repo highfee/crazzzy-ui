@@ -38,8 +38,6 @@ const StakedNFTPage = () => {
     }
   }, [stakedNFTS]);
 
-  console.log(stakedNFTS);
-
   return (
     <div>
       {isLoading ? (

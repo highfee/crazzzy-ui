@@ -152,7 +152,7 @@ export const transformOwnedNFT = (data) => {
   }));
 };
 
-export const getSingleCollectionNFTsOwnedByUser = async (contract) => {
+export const getSingleCollectionNFTsOwnedByUser = async (contract, account) => {
   const crmNFT = await getOwnedNFTs({
     contract,
     owner: account.address,
