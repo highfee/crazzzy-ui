@@ -1,12 +1,32 @@
-import { FaEthereum } from "react-icons/fa";
+"use client";
+
+import { ethers } from "ethers";
 import React from "react";
 
 import { useSelector } from "react-redux";
+import Image from "next/image";
+import { useActiveAccount, useReadContract } from "thirdweb/react";
+import { prepareContractCall, resolveMethod } from "thirdweb";
+import { stakinContract, stakingContractABI } from "@/utils/constants";
+import TransactionBtn from "./TransactionBtn";
+import { toast } from "sonner";
 
 const StakingInfo = () => {
+  const { address } = useActiveAccount();
+
   const staked = useSelector((state) => state.staking.staked);
 
   const userNFT = useSelector((state) => state.staking.userNFT);
+
+  const { data, isLoading } = useReadContract({
+    contract: stakinContract,
+    method:
+      "function getTotalRewards(address owner) public view returns (uint256)",
+    params: [address],
+  });
+
+  console.log(data);
+
   return (
     <div className="max-w-[350px] basis-[300px]">
       <div className="p-5 bg-[#1d1d29] rounded-xl mb-5">
@@ -25,17 +45,60 @@ const StakingInfo = () => {
       <div className="p-5 bg-[#1d1d29] rounded-xl">
         <p className="text-xl font-semibold">Available for withdraw</p>
         <div className="flex items-center gap-5 mt-5">
-          <div className=" w-10 h-10 bg-slate-500 rounded-lg grid place-items-center">
-            <FaEthereum size={24} fill="white" />
+          <div>
+            {/* <FaEthereum size={24} fill="white" /> */}
+            <Image alt="" src="/cbt.png" width="70" height={70} />
           </div>
           <div>
-            <p className="text-lg">30 CRO</p>
+            <p className="text-lg">
+              {/* {ress.data && Number(ress.data / 10n ** 18n)} CBT */}
+            </p>
             <p className="text-gray-400">Available</p>
           </div>
         </div>
-        <button className="mt-5 w-full border py-2 rounded-3xl">
+
+        {/* <button className="mt-5 w-full border py-2 rounded-3xl">
           Withdraw now
-        </button>
+        </button> */}
+        <TransactionBtn
+          transaction={() => {
+            const trx = prepareContractCall({
+              contract: stakinContract,
+              method: resolveMethod("claimAllRewards"),
+              params: [],
+            });
+
+            return trx;
+          }}
+          onTransactionConfirmed={(trx) => {
+            toast("Success", {
+              description: "Withdrawn",
+              action: {
+                label: "View",
+                onClick: () => {
+                  window.open(
+                    "https://cronos.org/explorer/testnet3/tx/" +
+                      trx.transactionHash,
+                    "_blank"
+                  );
+                },
+              },
+            });
+          }}
+          onError={(err) => {
+            toast("", { description: err.message });
+          }}
+          text="Withdraw now"
+          style={{
+            width: "100%",
+            padding: "8px 20px ",
+            background: "transparent",
+            color: "white",
+            border: "1px solid white",
+            borderRadius: "30px",
+            marginTop: "20px",
+          }}
+        />
       </div>
     </div>
   );

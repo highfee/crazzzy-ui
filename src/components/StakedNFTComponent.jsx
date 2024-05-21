@@ -52,6 +52,7 @@ const NFT = ({ nft }) => {
   const imgLoader = (url) => {
     return url;
   };
+
   return (
     <div className="h-[400p] rounded-2xl bg-[#1d1d29] p-5">
       <MediaRenderer

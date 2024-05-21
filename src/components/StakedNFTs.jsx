@@ -29,7 +29,7 @@ const StakedNFTPage = () => {
   const { data: stakedNFTS, isLoading } = useReadContract({
     contract: stakinContract,
     method: resolveMethod("getAllStakedNFTs"),
-    params: [account && account.address],
+    params: [account && account?.address],
   });
 
   useEffect(() => {
@@ -37,6 +37,8 @@ const StakedNFTPage = () => {
       dispatch(setStaked(transformNFT(stakedNFTS)));
     }
   }, [stakedNFTS]);
+
+  console.log(stakedNFTS);
 
   return (
     <div>
@@ -53,7 +55,7 @@ const StakedNFTPage = () => {
         </p>
       ) : (
         <div className="nfts mt-10">
-          {stakedNFTS.map((item) => (
+          {stakedNFTS?.map((item) => (
             <NFT key={item} nft={item} />
           ))}
         </div>

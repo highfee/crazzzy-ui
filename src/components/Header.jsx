@@ -29,7 +29,7 @@ const rubik = Rubik_Bubbles({
 const links = [
   {
     name: "Staking",
-    path: "/stake",
+    path: "/staking?view=all",
   },
   {
     name: "Raffle",

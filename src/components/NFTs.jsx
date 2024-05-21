@@ -15,54 +15,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const NFTs = () => {
-  const dispatch = useDispatch();
-  const account = useActiveAccount();
-
-  const [nfts, setNfts] = useState([]);
-
-  const getSingleCollectionNFTsOwnedByUser = async (contract) => {
-    const crmNFT = await getOwnedNFTs({
-      contract,
-      owner: account.address,
-    });
-    return crmNFT;
-  };
-
-  function getTotalNFTs(data) {
-    let total = 0;
-    data.map((item) => {
-      total += item.nfts.length;
-    });
-    console.log(total);
-    return total;
-  }
-
-  useEffect(() => {
-    const getAllNFTsOwnedByUserInAllCollections = async () => {
-      const nftData = [];
-
-      for (const collection of collections) {
-        const nfts = await getSingleCollectionNFTsOwnedByUser(
-          collection.contract
-        );
-        nftData.push({
-          collection: collection.name,
-          collectionAddress: collection.contract.address,
-          nfts,
-        });
-      }
-
-      setNfts(nftData);
-      dispatch(setUserNFT(getTotalNFTs(nftData)));
-      // dispatch(setUserNFT(20));
-    };
-
-    if (account) {
-      getAllNFTsOwnedByUserInAllCollections();
-    }
-  }, [account]);
-
+const NFTs = ({ nfts }) => {
   return (
     <div className="flex-1">
       <div className="my-5 flex items-center gap-3">

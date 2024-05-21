@@ -4,8 +4,8 @@ import { defineChain } from "thirdweb/chains";
 // export const filters = ["All", "Hard Staked", "Unstaked"];
 
 export const filters = [
-  { name: "Your NFTs", path: "/stake" },
-  { name: "Staked", path: "/stake/staked" },
+  { name: "Your NFTs", path: "/staking?view=all" },
+  { name: "Staked", path: "/staking?view=staked" },
   // { name: "Unstaked", path: "/stake/unstaked" },
 ];
 
@@ -54,7 +54,7 @@ export const NFT_images = [
 
 // create the client with your clientId, or secretKey if in a server environment
 export const client = createThirdwebClient({
-  clientId: "1639134fe6d77249631aa361f3a9cbe1",
+  clientId: "c6d7ac2c1d31bacea1af9db0b2593e09",
 });
 
 export const cronosTestnet = defineChain({
@@ -71,7 +71,7 @@ export const raffleContract = getContract({
 export const stakinContract = getContract({
   client,
   chain: defineChain(338),
-  address: "0x8EaEE8117Ce6855187B9d45832a5cA40BF330eB7",
+  address: "0xF1Bde2488A947Aa4979b9EC73acee4beC1a6037f",
 });
 
 export const cbtTokenContract = getContract({
@@ -139,3 +139,31 @@ export const collections = [
     }),
   },
 ];
+
+export const transformOwnedNFT = (data) => {
+  return data.map((nft) => ({
+    ...nft,
+    tokenId: parseInt(nft.tokenId.toString()),
+    accumulatedReward: parseInt(nft.accumulatedReward.toString()),
+    stakedAt: parseInt(nft.stakedAt.toString()),
+
+    lastClaimedAt: parseInt(nft.lastClaimedAt.toString()),
+  }));
+};
+
+export const getSingleCollectionNFTsOwnedByUser = async (contract) => {
+  const crmNFT = await getOwnedNFTs({
+    contract,
+    owner: account.address,
+  });
+  return crmNFT;
+};
+
+export function getTotalNFTs(data) {
+  let total = 0;
+  data.map((item) => {
+    total += item.nfts.length;
+  });
+
+  return total;
+}
