@@ -67,9 +67,7 @@ const Stakingpage = () => {
     <>
       {loadingNFTs ? (
         <div className="flex flex-col gap-10 mt-8">
-          <Skeleton className="w-full h-20 rounded-2xl bg-[#1D1D29]" />
-          <Skeleton className="w-full h-20 rounded-2xl bg-[#1D1D29]" />
-          <Skeleton className="w-full h-20 rounded-2xl bg-[#1D1D29]" />
+          <Skeleton className="w-full h-[calc(100vh-350px)] rounded-2xl bg-[#1D1D29]" />
         </div>
       ) : (
         <NFTs nfts={nfts} />
