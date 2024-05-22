@@ -13,10 +13,12 @@ import {
 } from "@/utils/constants";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { resolveMethod } from "thirdweb";
+import { prepareContractCall, resolveMethod } from "thirdweb";
 import { useActiveAccount, useReadContract } from "thirdweb/react";
 import StakedNFTPage from "@/components/StakedNFTs";
 import { Skeleton } from "@/components/ui/skeleton";
+import TransactionBtn from "@/components/TransactionBtn";
+import { toast } from "sonner";
 
 const Stakingpage = () => {
   const [loadingNFTs, setLoadingNFTs] = useState(true);
@@ -80,6 +82,45 @@ const Stakingpage = () => {
         <button className="py-1 px-5 rounded-md bg-[#7C9938] text-white border border-[#7C9938]">
           Unstake all
         </button>
+        <TransactionBtn
+          transaction={() => {
+            const trx = prepareContractCall({
+              contract: stakinContract,
+              method: resolveMethod("unstakeAllNFTs"),
+              params: [],
+            });
+
+            return trx;
+          }}
+          onTransactionConfirmed={(trx) => {
+            toast("Success", {
+              description: "All NFTs unstaked",
+              action: {
+                label: "View",
+                onClick: () => {
+                  window.open(
+                    "https://cronos.org/explorer/testnet3/tx/" +
+                      trx.transactionHash,
+                    "_blank"
+                  );
+                },
+              },
+            });
+          }}
+          onError={(err) => {
+            toast("", { description: err.message });
+          }}
+          text="Unstake all"
+          style={{
+            padding: "4px 20px ",
+            background: "#7C9938",
+            color: "white",
+            border: "1px solid #7C9938",
+            borderRadius: "0",
+            marginTop: "",
+            fontSize: "18px",
+          }}
+        />
       </div>
       <StakedNFTPage />
     </div>

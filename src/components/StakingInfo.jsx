@@ -18,14 +18,12 @@ const StakingInfo = () => {
 
   const userNFT = useSelector((state) => state.staking.userNFT);
 
-  const data = useReadContract({
+  const { data, isLoading } = useReadContract({
     contract: stakinContract,
     method:
-      "function getTotalRewards(address owner) public view returns (uint256)",
-    params: [address],
+      "function getTotalRewards(address owner,uint256 dummyParam) public view returns (uint256, uint256)",
+    params: [address, 0],
   });
-
-  // console.log(data);
 
   return (
     <div className="max-w-[350px] basis-[300px]">
@@ -51,7 +49,7 @@ const StakingInfo = () => {
           </div>
           <div>
             <p className="text-lg">
-              {/* {ress.data && Number(ress.data / 10n ** 18n)} CBT */}
+              {isLoading ? 0 : parseInt(data[0].toString())} CBT
             </p>
             <p className="text-gray-400">Available</p>
           </div>
