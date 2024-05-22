@@ -39,6 +39,7 @@ const Stakingpage = () => {
   });
 
   useEffect(() => {
+    setLoadingNFTs(true);
     const getAllNFTsOwnedByUserInAllCollections = async () => {
       const nftData = [];
 
@@ -63,7 +64,7 @@ const Stakingpage = () => {
       dispatch(setStaked(transformOwnedNFT(stakedNFTS)));
       getAllNFTsOwnedByUserInAllCollections();
     }
-  }, [stakedNFTS, view]);
+  }, [stakedNFTS, account]);
 
   // console.log(stakedNFTS);
   return view == "all" ? (
@@ -79,9 +80,9 @@ const Stakingpage = () => {
   ) : (
     <div>
       <div className="my-5 flex items-center gap-3">
-        <button className="py-1 px-5 rounded-md bg-[#7C9938] text-white border border-[#7C9938]">
+        {/* <button className="py-1 px-5 rounded-md bg-[#7C9938] text-white border border-[#7C9938]">
           Unstake all
-        </button>
+        </button> */}
         <TransactionBtn
           transaction={() => {
             const trx = prepareContractCall({

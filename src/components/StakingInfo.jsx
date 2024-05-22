@@ -1,7 +1,6 @@
 "use client";
 
-import { ethers } from "ethers";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useSelector } from "react-redux";
 import Image from "next/image";
@@ -10,9 +9,13 @@ import { prepareContractCall, resolveMethod } from "thirdweb";
 import { stakinContract, stakingContractABI } from "@/utils/constants";
 import TransactionBtn from "./TransactionBtn";
 import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
 
 const StakingInfo = () => {
   const { address } = useActiveAccount();
+  const searchParams = useSearchParams();
+
+  const view = searchParams.get("view");
 
   const staked = useSelector((state) => state.staking.staked);
 
@@ -24,6 +27,8 @@ const StakingInfo = () => {
       "function getTotalRewards(address owner,uint256 dummyParam) public view returns (uint256, uint256)",
     params: [address, 0],
   });
+
+  useEffect(() => {}, [view]);
 
   return (
     <div className="max-w-[350px] basis-[300px]">

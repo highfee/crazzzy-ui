@@ -20,6 +20,7 @@ import ConnectBtn from "./ConnectBtn";
 import { usePathname } from "next/navigation";
 import CreateRaffle from "@/app/admin/components/CreateRaffle";
 import { useActiveAccount } from "thirdweb/react";
+import { cn } from "@/lib/utils";
 
 const rubik = Rubik_Bubbles({
   subsets: ["latin"],
@@ -70,8 +71,18 @@ const Header = () => {
             </Link>
             <div className=" gap-8 text-lg hidden lg:flex">
               {links.map((link) => (
-                <Link href={link.path} key={link.name}>
+                <Link
+                  href={link.path}
+                  key={link.name}
+                  className={cn(
+                    !link.active &&
+                      "cursor-not-allowed opacity-60 pointer-events-non relative group"
+                  )}
+                >
                   {link.name}
+                  <span className="absolute left-0 top-10 hidden group-hover:block text-xs min-w-max">
+                    Coming soon
+                  </span>
                 </Link>
               ))}
               {path.includes("raffles") && account && <CreateRaffle />}
