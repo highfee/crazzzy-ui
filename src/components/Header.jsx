@@ -30,23 +30,27 @@ const links = [
   {
     name: "Staking",
     path: "/staking?view=all",
+    active: true,
   },
   {
     name: "Raffle",
     path: "/raffles",
+    active: true,
   },
   {
     name: "Auctions",
     path: "/",
+    active: false,
   },
   {
     name: "Flip Coin",
     path: "/",
+    active: false,
   },
-  {
-    name: "Admin",
-    path: "/admin",
-  },
+  // {
+  //   name: "Admin",
+  //   path: "/admin",
+  // },
 ];
 
 const Header = () => {
