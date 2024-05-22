@@ -58,11 +58,12 @@ const Stakingpage = () => {
       setLoadingNFTs(false);
     };
     if (!isLoading) {
-      dispatch(setStaked(transformOwnedNFT(stakedNFTS)));
+      // dispatch(setStaked(transformOwnedNFT(stakedNFTS)));
       getAllNFTsOwnedByUserInAllCollections();
     }
   }, [stakedNFTS, view]);
 
+  // console.log(stakedNFTS);
   return view == "all" ? (
     <>
       {loadingNFTs ? (
