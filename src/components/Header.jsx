@@ -40,8 +40,8 @@ const links = [
   },
   {
     name: "Auctions",
-    path: "/",
-    active: false,
+    path: "/auction",
+    active: true,
   },
   {
     name: "Flip Coin",
@@ -96,7 +96,7 @@ const Header = () => {
                 <SheetTrigger>
                   <FaBars size="22" />
                 </SheetTrigger>
-                <SheetContent side="top">
+                <SheetContent side="top" >
                   <div className=" flex flex-col py-10 gap-8 justify-center bg-whit h-full">
                     {links.map((link) => (
                       <SheetClose key={link.path} asChild>

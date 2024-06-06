@@ -30,6 +30,8 @@ const StakingInfo = () => {
 
   useEffect(() => {}, [view]);
 
+  console.log(data);
+
   return (
     <div className="max-w-[350px] basis-[300px]">
       <div className="p-5 bg-[#1d1d29] rounded-xl mb-5">
@@ -63,45 +65,57 @@ const StakingInfo = () => {
         {/* <button className="mt-5 w-full border py-2 rounded-3xl">
           Withdraw now
         </button> */}
-        <TransactionBtn
-          transaction={() => {
-            const trx = prepareContractCall({
-              contract: stakinContract,
-              method: resolveMethod("claimAllRewards"),
-              params: [],
-            });
 
-            return trx;
-          }}
-          onTransactionConfirmed={(trx) => {
-            toast("Success", {
-              description: "Withdrawn",
-              action: {
-                label: "View",
-                onClick: () => {
-                  window.open(
-                    "https://cronos.org/explorer/testnet3/tx/" +
-                      trx.transactionHash,
-                    "_blank"
-                  );
-                },
-              },
-            });
-          }}
-          onError={(err) => {
-            toast("", { description: err.message });
-          }}
-          text="Withdraw now"
-          style={{
-            width: "100%",
-            padding: "8px 20px ",
-            background: "transparent",
-            color: "white",
-            border: "1px solid white",
-            borderRadius: "30px",
-            marginTop: "20px",
-          }}
-        />
+        {data && (
+          <div
+            style={{
+              opacity: parseInt(data[0]?.toString()) > 0 ? 1 : 0.2,
+              cursor:
+                parseInt(data[0]?.toString()) > 0 ? "pointer" : "not-allowed",
+              pointerEvents: parseInt(data[0]?.toString()) > 0 ? "all" : "none",
+            }}
+          >
+            <TransactionBtn
+              transaction={() => {
+                const trx = prepareContractCall({
+                  contract: stakinContract,
+                  method: resolveMethod("claimAllRewards"),
+                  params: [],
+                });
+
+                return trx;
+              }}
+              onTransactionConfirmed={(trx) => {
+                toast("Success", {
+                  description: "Withdrawn",
+                  action: {
+                    label: "View",
+                    onClick: () => {
+                      window.open(
+                        "https://cronos.org/explorer/testnet3/tx/" +
+                          trx.transactionHash,
+                        "_blank"
+                      );
+                    },
+                  },
+                });
+              }}
+              onError={(err) => {
+                toast("", { description: err.message });
+              }}
+              text="Withdraw now"
+              style={{
+                width: "100%",
+                padding: "8px 20px ",
+                background: "transparent",
+                color: "white",
+                border: "1px solid white",
+                borderRadius: "30px",
+                marginTop: "20px",
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
