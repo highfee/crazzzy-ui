@@ -30,8 +30,6 @@ const StakingInfo = () => {
 
   useEffect(() => {}, [view]);
 
-  console.log(data);
-
   return (
     <div className="max-w-[350px] basis-[300px]">
       <div className="p-5 bg-[#1d1d29] rounded-xl mb-5">
